@@ -1,0 +1,26 @@
+# Environments
+.venv/
+.venv-gpu/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Large Data & Datasets
+*.bin
+alpaca_data.json
+input.txt
+claude-fable-5.md
+
+# Checkpoints & Outputs (>100MB binaries)
+out/
+
+# IDE & OS
+.vscode/
+.idea/
+*.log
+.DS_Store

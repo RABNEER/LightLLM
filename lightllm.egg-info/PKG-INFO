@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: lightllm
+Version: 0.1.0
+Summary: A 10M parameter LLM from scratch.
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: tiktoken
+Requires-Dist: numpy
+Requires-Dist: tqdm
+Requires-Dist: pip

@@ -1,0 +1,17 @@
+[project]
+name = "lightllm"
+version = "0.1.0"
+description = "A 10M parameter LLM from scratch."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "torch",
+    "tiktoken",
+    "numpy",
+    "tqdm",
+    "pip",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
