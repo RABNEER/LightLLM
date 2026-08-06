@@ -23,7 +23,7 @@ def prepare():
     
     formatted_text = ""
     
-    # --- A. Inject Explicit Basic Greetings & Math Data ---
+    # --- A. Inject Explicit Basic Greetings, Facts, Coding & Math Data ---
     custom_qa = [
         # Basic Greetings
         ("hello", "Hello! How are you doing today?"),
@@ -33,31 +33,42 @@ def prepare():
         ("how are you", "I am doing great! How are you?"),
         ("How are you?", "I am doing great! How can I assist you today?"),
         ("what is your name", "My name is LightLLM, a custom AI model."),
-        ("What is your name?", "I am LightLLM, a 10M parameter neural network model!"),
-        
-        # Arithmetic / Basic Math
+        ("What is your name?", "I am LightLLM, a 124M parameter neural network model!"),
+        ("who created you", "I was created and trained from scratch by RABNEER!"),
+        ("Who created LightLLM?", "LightLLM was created and trained from scratch by RABNEER!"),
+
+        # General Knowledge Facts
+        ("what is an apple", "An apple is a sweet, round edible fruit produced by an apple tree."),
+        ("what is apple", "An apple is a sweet edible fruit produced by an apple tree."),
+        ("What is an apple?", "An apple is a sweet, edible fruit produced by an apple tree."),
+        ("what is python", "Python is a popular high-level programming language known for readability and powerful AI libraries."),
+        ("what is an llm", "An LLM is a Large Language Model built using Transformer neural network architectures."),
+        ("what is ai", "AI stands for Artificial Intelligence, enabling computers to perform tasks like learning, reasoning, and speech."),
+        ("what is gravity", "Gravity is a fundamental force of nature that pulls objects with mass toward one another."),
+        ("what is the capital of france", "The capital of France is Paris."),
+        ("what is 2+2", "4"),
+        ("what is 5+5", "10"),
+
+        # Basic Math Addition, Subtraction & Multiplication
         ("2+2", "4"),
         ("2 + 2", "4"),
-        ("What is 2+2?", "4"),
-        ("What is 2 + 2?", "4"),
-        ("2+3", "5"),
-        ("2 + 3", "5"),
         ("5+5", "10"),
         ("5 + 5", "10"),
         ("10+10", "20"),
         ("10 + 10", "20"),
-        ("1+1", "2"),
-        ("1 + 1", "2"),
-        ("3+3", "6"),
-        ("3 + 3", "6"),
-        ("4+4", "8"),
-        ("4 + 4", "8"),
     ]
     
-    # Generate full addition table (0..15) repeated to make it prominent
+    # Generate full addition table (0..30)
+    for a in range(31):
+        for b in range(31):
+            custom_qa.append((f"{a}+{b}", f"{a+b}"))
+            custom_qa.append((f"{a} + {b}", f"{a+b}"))
+
+    # Generate full multiplication table (0..15)
     for a in range(16):
         for b in range(16):
-            custom_qa.append((f"{a}+{b}", f"{a+b}"))
+            custom_qa.append((f"{a}*{b}", f"{a*b}"))
+            custom_qa.append((f"{a} * {b}", f"{a*b}"))
             custom_qa.append((f"{a} + {b}", f"{a+b}"))
             custom_qa.append((f"What is {a} + {b}?", f"The answer is {a+b}."))
 
