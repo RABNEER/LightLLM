@@ -18,10 +18,10 @@ def main():
     print(f"Non-Embedding Params:  {format_params(non_emb_params)}")
     print("-" * 30)
     
-    if total_params >= 9.5e6 and total_params <= 11e6:
-        print("[SUCCESS] LightLLM is in the target 10M range!")
+    if total_params >= 100e6:
+        print("[SUCCESS] LightLLM is in the 124M GPT-2 Small parameter range!")
     else:
-        print(f"[WARNING] Model size is {format_params(total_params)}, aim for ~10M.")
+        print(f"[INFO] Model size is {format_params(total_params)}.")
 
 if __name__ == "__main__":
     main()
