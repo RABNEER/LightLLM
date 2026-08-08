@@ -93,6 +93,8 @@ while iter_num <= max_iters:
                 X, Y = get_batch('val')
                 with torch.amp.autocast(device_type=device, dtype=torch.float16, enabled=(device == 'cuda')):
                     logits, loss = model(X, Y)
+                    if loss.dim() > 0:
+                        loss = loss.mean()
                 losses[k] = loss.item()
             val_loss = losses.mean()
             print(f"step {iter_num}: val loss {val_loss:.4f}, lr {lr:.2e}")
