@@ -141,9 +141,10 @@ while iter_num <= max_iters:
     
     iter_num += 1
 
-# Always save final model checkpoint at completion
+# Always save final model checkpoint at completion (unwrapped for single-GPU inference)
+raw_model = model.module if hasattr(model, 'module') else model
 checkpoint = {
-    'model': model.state_dict(),
+    'model': raw_model.state_dict(),
     'optimizer': optimizer.state_dict(),
     'config': config,
     'iter_num': iter_num - 1,
