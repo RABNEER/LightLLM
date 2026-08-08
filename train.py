@@ -45,6 +45,11 @@ def get_batch(split):
 config = LightLLMConfig()
 model = LightLLM(config).to(device)
 
+# Multi-GPU support (Dual T4 on Kaggle = 32GB total VRAM!)
+if device == 'cuda' and torch.cuda.device_count() > 1:
+    print(f"[INFO] Multi-GPU Mode: Utilizing all {torch.cuda.device_count()} GPUs (Dual T4 DataParallel)!")
+    model = torch.nn.DataParallel(model)
+
 # optimizer
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, betas=(beta1, beta2), weight_decay=weight_decay)
 
@@ -95,8 +100,9 @@ while iter_num <= max_iters:
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 if iter_num > 0:
+                    raw_model = model.module if hasattr(model, 'module') else model
                     checkpoint = {
-                        'model': model.state_dict(),
+                        'model': raw_model.state_dict(),
                         'optimizer': optimizer.state_dict(),
                         'config': config,
                         'iter_num': iter_num,
@@ -112,6 +118,8 @@ while iter_num <= max_iters:
     optimizer.zero_grad(set_to_none=True)
     with torch.amp.autocast(device_type=device, dtype=torch.float16, enabled=(device == 'cuda')):
         logits, loss = model(X, Y)
+        if loss.dim() > 0:
+            loss = loss.mean() # Average loss across Dual T4 GPUs
     
     scaler.scale(loss).backward()
     
