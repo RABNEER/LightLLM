@@ -3,20 +3,18 @@ import sys
 import time
 import torch
 from lightllm.streaming import StreamTransformer
-from lightllm.model import LightLLM
-from lightllm.config import LightLLMConfig
 from lightllm.tokenizer import Tokenizer
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
-def chat():
+def chat_stream():
     print("\n" + "=" * 65)
-    print(" 🤖 LIGHTLLM INTERACTIVE CHAT [STREAMTRANSFORMER (STR)]")
-    print(" Technology: Layer-Streaming O(1) Memory Engine")
+    print(" 🚀 LIGHTLLM INTERACTIVE CHAT [STREAMTRANSFORMER ENGINE (STR)]")
+    print(" Architecture: Depth-Invariant O(1) VRAM Layer-Streaming")
     print(" Author: Ranveer Kumar")
     print("=" * 65)
-    print(" Type any question. Type 'quit' or 'exit' to exit.\n")
+    print(" Type any prompt/question. Type 'quit' or 'exit' to leave.\n")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     checkpoint_path = os.path.join('out', 'checkpoint.pt')
@@ -25,12 +23,18 @@ def chat():
         print(f"❌ Error: Checkpoint not found at '{checkpoint_path}'.")
         return
 
-    # Initialize StreamTransformer (STR) from checkpoint
-    print(f"⚡ Loading StreamTransformer (STR) on {device.upper()}...")
-    model = StreamTransformer.from_checkpoint(checkpoint_path, shard_dir="model_shards", device=device)
+    # 1. Initialize StreamTransformer Engine directly from Checkpoint
+    print("⚡ Initializing StreamTransformer from trained checkpoint...")
+    stream_model = StreamTransformer.from_checkpoint(
+        checkpoint_path, 
+        shard_dir="model_shards", 
+        device=device,
+        prefetch=(device == 'cuda')
+    )
     tokenizer = Tokenizer()
     print("=" * 65 + "\n")
 
+    # 2. Interactive Chat Loop
     while True:
         try:
             prompt = input("👤 YOU: ")
@@ -41,28 +45,29 @@ def chat():
             if not prompt.strip():
                 continue
 
+            # Format for instruction tuning
             formatted_prompt = f"User: {prompt}\nAssistant:"
-            input_ids = torch.tensor([tokenizer.encode(formatted_prompt)], dtype=torch.long).to(device)
+            input_ids = torch.tensor([tokenizer.encode(formatted_prompt)], dtype=torch.long, device=device)
             
-            print("🤖 LightLLM (STR) is streaming layers...", end="", flush=True)
+            print("🤖 StreamTransformer is streaming layers...", end="", flush=True)
             
             t0 = time.perf_counter()
             with torch.no_grad():
-                generated_ids = model.generate(
+                generated_ids = stream_model.generate(
                     input_ids, 
                     max_new_tokens=60, 
                     temperature=0.7,
                     top_k=40
                 )
-            duration = time.perf_counter() - t0
+            gen_duration = (time.perf_counter() - t0)
             
             new_tokens = generated_ids[0][input_ids.shape[1]:]
             response = tokenizer.decode(new_tokens.cpu().tolist())
             response = response.split("<|endoftext|>")[0].strip()
             
+            # Clean up line
             print("\r" + " " * 45 + "\r", end="") 
-            print(f"🤖 LIGHTLLM (STR): {response}\n")
-            print(f"   [Generated {len(new_tokens)} tokens in {duration:.2f}s | O(1) Memory Active]")
+            print(f"🤖 STR RESPONSE ({len(new_tokens)} tokens in {gen_duration:.2f}s):\n{response}\n")
             print("-" * 65)
 
         except KeyboardInterrupt:
@@ -72,4 +77,4 @@ def chat():
             print(f"\n❌ Error: {e}")
 
 if __name__ == "__main__":
-    chat()
+    chat_stream()
