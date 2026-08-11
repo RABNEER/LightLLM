@@ -8,14 +8,14 @@
   <img src="https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch 2.x" />
   <img src="https://img.shields.io/badge/Architecture-Decoder--Only%20Causal-blue?style=for-the-badge" alt="Decoder-Only" />
   <img src="https://img.shields.io/badge/Parameters-123.65M-success?style=for-the-badge" alt="124M Params" />
-  <img src="https://img.shields.io/badge/Ollama-ranveer%2Flightllm-FF9800?style=for-the-badge&logo=ollama" alt="Ollama" />
+  <img src="https://img.shields.io/badge/Ollama-ranveerkr%2Flightllm-FF9800?style=for-the-badge&logo=ollama" alt="Ollama" />
   <img src="https://img.shields.io/badge/License-MIT-purple?style=for-the-badge" alt="License" />
   <img src="https://img.shields.io/badge/Author-Ranveer%20Kumar-9C27B0?style=for-the-badge" alt="Author" />
 </p>
 
 ```bash
 # Run and chat with LightLLM via Ollama in 1 command:
-ollama run ranveer/lightllm
+ollama run ranveerkr/lightllm
 ```
 
 ---
@@ -29,7 +29,7 @@ ollama run ranveer/lightllm
 Designed for high efficiency on consumer hardware, LightLLM incorporates **PyTorch 2.0 FlashAttention**, **FP16 Automatic Mixed Precision (AMP)**, and a custom binary memory-mapped data pipeline. Pretrained for 50,000 optimization iterations down to **`0.0162` cross-entropy loss**, LightLLM delivers coherent English instruction following and conversational capabilities with a lightweight footprint (~2.8 GB VRAM for full training).
 
 > 📄 **Official 13-Page Research Paper**: [`paper/lightllm_paper.pdf`](paper/lightllm_paper.pdf)  
-> 🦙 **Run with Ollama**: `ollama run ranveer/lightllm`
+> 🦙 **Run with Ollama**: `ollama run ranveerkr/lightllm`
 
 ---
 
@@ -77,7 +77,7 @@ LightLLM/
 ### 1. Run with Ollama (Fastest)
 Run the model directly using Ollama CLI:
 ```bash
-ollama run ranveer/lightllm
+ollama run ranveerkr/lightllm
 ```
 
 ---
