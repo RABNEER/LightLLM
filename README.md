@@ -58,7 +58,7 @@ LightLLM/
 │   ├── config.py           # LightLLMConfig dataclass
 │   ├── model.py            # Transformer decoder blocks & Fused FlashAttention
 │   ├── tokenizer.py        # GPT-2 BPE Tokenizer wrapper
-│   └── utils.py            # Memory telemetry & parameter counter
+│   └── utils.py            # Parameter formatting & memory diagnostics
 ├── paper/
 │   ├── lightllm_paper.pdf  # Publication-grade 13-Page Research Monograph
 │   ├── lightllm_paper.tex  # LaTeX source code
@@ -66,9 +66,6 @@ LightLLM/
 ├── prepare_data.py         # Binary memory-mapped dataset preparation
 ├── train.py                # High-performance PyTorch FP16 AMP training loop
 ├── chat.py                 # Interactive terminal chat CLI
-├── test_inference.py       # Standalone generation & prompt testing
-├── convert_to_gguf.py      # Standalone GGUF exporter (with BPE merges)
-├── export_hf.py            # Hugging Face format exporter
 ├── Modelfile               # Ollama model definition
 └── pyproject.toml          # Package configuration
 ```

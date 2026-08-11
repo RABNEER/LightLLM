@@ -14,6 +14,18 @@ __pycache__/
 dist/
 build/
 
+# Automation, Diagnostic & Benchmark Scripts
+check_model.py
+test_100_layers.py
+test_1000_layers.py
+test_inference.py
+test_stream_training.py
+benchmark_streaming.py
+convert_to_gguf.py
+export_hf.py
+chat_stream.py
+*.ipynb
+
 # Large Datasets & Binary Maps
 *.bin
 *.pt
