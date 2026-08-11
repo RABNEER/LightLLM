@@ -1,26 +1,40 @@
-# Environments
+# Virtual Environments
 .venv/
 .venv-gpu/
 env/
 venv/
+ENV/
 
-# Python cache
+# Python Cache & Bytecode
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+dist/
+build/
 
-# Large Data & Datasets
+# Large Datasets & Binary Maps
 *.bin
+*.pt
+*.safetensors
+*.gguf
 alpaca_data.json
 input.txt
 claude-fable-5.md
 
-# Checkpoints & Outputs (>100MB binaries)
+# Checkpoints, Model Shards & Output Artifacts
 out/
+model_shards/
+shards_*/
+train_streaming_shards/
+train_shards/
+research_airllm/
 
-# IDE & OS
+# Logs & System Files
+logs/
+*.log
 .vscode/
 .idea/
-*.log
 .DS_Store
+Thumbs.db
