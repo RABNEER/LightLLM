@@ -1,0 +1,24 @@
+# ==============================================================================
+# Ollama Modelfile for LightLLM (124M Parameters)
+# Author: Ranveer Kumar (Independent AI Researcher)
+# Repository: https://github.com/RABNEER/LightLLM
+# ==============================================================================
+
+# 1. Base Model GGUF File
+FROM ./out/lightllm-124m.gguf
+
+# 2. System Instructions
+SYSTEM """You are LightLLM, a lightweight, depth-invariant foundation language model engineered by Ranveer Kumar. You provide concise, insightful, and accurate answers."""
+
+# 3. Prompt Template (Alpaca Instruction Tuning Format)
+TEMPLATE """{{ if .System }}System: {{ .System }}{{ end }}
+User: {{ .Prompt }}
+Assistant:"""
+
+# 4. Inference Hyperparameters
+PARAMETER stop "<|endoftext|>"
+PARAMETER stop "User:"
+PARAMETER temperature 0.7
+PARAMETER top_k 40
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
