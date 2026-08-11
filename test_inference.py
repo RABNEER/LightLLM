@@ -1,70 +1,61 @@
+"""
+test_inference.py – StreamTransformer (STR) Inference Verification
+Author: Ranveer Kumar
+"""
+
 import os
 import sys
 import torch
-from lightllm.model import LightLLM
-from lightllm.config import LightLLMConfig
+from lightllm.streaming import StreamTransformer
 from lightllm.tokenizer import Tokenizer
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
 def test_inference():
-    print("=" * 60)
-    print(" [LIGHTLLM] INFERENCE DEMO WITH TRAINED KAGGLE CHECKPOINT")
-    print("=" * 60)
+    print("=" * 65)
+    print(" 🚀 LIGHTLLM: STREAMTRANSFORMER (STR) INFERENCE TEST")
+    print(" Technology: Layer-Streaming O(1) Memory Engine")
+    print(" Author: Ranveer Kumar (Independent AI Researcher)")
+    print("=" * 65)
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[DEVICE]: {device.upper()}")
     
-    # 1. Load Checkpoint
     checkpoint_path = "out/checkpoint.pt"
     if not os.path.exists(checkpoint_path):
         print(f"[ERROR] Checkpoint not found at: {checkpoint_path}")
         return
         
-    print(f"[LOADING]: Loading trained weights from {checkpoint_path}...")
-    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
-    
-    config = checkpoint.get('config', LightLLMConfig())
-    model = LightLLM(config)
-    
-    # Handle state_dict if trained under DataParallel
-    state_dict = checkpoint['model']
-    unwrapped_state_dict = {}
-    for k, v in state_dict.items():
-        if k.startswith("module."):
-            unwrapped_state_dict[k[7:]] = v
-        else:
-            unwrapped_state_dict[k] = v
-            
-    model.load_state_dict(unwrapped_state_dict, strict=False)
-    model.to(device)
-    model.eval()
+    # Initialize StreamTransformer from checkpoint
+    print(f"\n[STREAMING]: Loading model through StreamTransformer engine...")
+    model = StreamTransformer.from_checkpoint(checkpoint_path, shard_dir="model_shards", device=device)
     tokenizer = Tokenizer()
     
-    print("[STATUS]: Model loaded successfully!")
-    if 'best_val_loss' in checkpoint:
-        print(f"[CHECKPOINT METRIC]: Best Val Loss = {checkpoint['best_val_loss']}")
-        
-    # 2. Test Prompts
     prompts = [
         "Artificial Intelligence is",
         "The purpose of education is",
         "In a faraway galaxy",
     ]
     
-    print("\n" + "=" * 60)
-    print(" GENERATING TEXT SAMPLES FROM TRAINED MODEL")
-    print("=" * 60)
+    print("\n" + "=" * 65)
+    print(" GENERATING TEXT SAMPLES THROUGH STREAMTRANSFORMER (STR)")
+    print("=" * 65)
     
     for prompt in prompts:
-        input_ids = torch.tensor([tokenizer.encode(prompt)], dtype=torch.long).to(device)
+        formatted = f"User: {prompt}\nAssistant:"
+        input_ids = torch.tensor([tokenizer.encode(formatted)], dtype=torch.long).to(device)
+        
         with torch.no_grad():
-            generated_ids = model.generate(input_ids, max_new_tokens=40, temperature=0.8, top_k=40)
-        output_text = tokenizer.decode(generated_ids[0].tolist())
+            generated_ids = model.generate(input_ids, max_new_tokens=40, temperature=0.7, top_k=40)
+            
+        new_tokens = generated_ids[0][input_ids.shape[1]:]
+        output_text = tokenizer.decode(new_tokens.cpu().tolist())
+        output_text = output_text.split("<|endoftext|>")[0].strip()
+        
         print(f"\n[PROMPT]: '{prompt}'")
-        print(f"[GENERATION]:\n{output_text}")
-        print("-" * 60)
+        print(f"[STR GENERATION]:\n{output_text}")
+        print("-" * 65)
 
 if __name__ == "__main__":
     test_inference()
